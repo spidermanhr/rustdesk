@@ -9,7 +9,9 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  RUSTDESK_PUBLIC_KEY: "ssh-ed25519 JyhxiWMXyPn6Ei49WEa9D5FY8DPLZdZXzlgNlcbyuaU="
+  RUSTDESK_RELAY: "remote.haustor.eu"      # Tvoj server
+  RUSTDESK_SERVER: "remote.haustor.eu"     # Tvoj server
+  RUSTDESK_PUBLIC_KEY: "ssh-ed25519 JyhxiWMXyPn6Ei49WEa9D5FY8DPLZdZXzlgNlcbyuaU"
 
 jobs:
   build-linux:
