@@ -1,0 +1,67 @@
+name: RustDesk Custom Build
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTDESK_PUBLIC_KEY: "ssh-ed25519 JyhxiWMXyPn6Ei49WEa9D5FY8DPLZdZXzlgNlcbyuaU="
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: sudo apt update && sudo apt install -y libxcb-shape0-dev libxcb-xfixes0-dev pkg-config libssl-dev
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - name: Build
+        run: cargo build --release
+      - name: Upload binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: rustdesk-linux
+          path: target/release/rustdesk
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-pc-windows-msvc
+          override: true
+      - name: Build
+        run: cargo build --release --target x86_64-pc-windows-msvc
+      - name: Upload binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: rustdesk-windows
+          path: target/x86_64-pc-windows-msvc/release/rustdesk.exe
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - name: Build
+        run: cargo build --release
+      - name: Upload binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: rustdesk-macos
+          path: target/release/rustdesk
